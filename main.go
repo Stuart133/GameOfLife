@@ -81,8 +81,9 @@ func (board Board) num_neighbours(x int, y int) int {
 // Draw board on console
 func (board Board) draw() {
 	clear()
-	for i := 0; i < board_size; i++ {
-		for j := 0; j < board_size; j++ {
+	// There is a 2 layer buffer in all directions, don't draw this
+	for i := 2; i < board_size; i++ {
+		for j := 2; j < board_size; j++ {
 			if board[i][j] {
 				fmt.Print("x")
 			} else {
@@ -105,7 +106,6 @@ func make_board(size int) Board {
 
 // Create a glider at given coordinates
 func (board Board) add_glider(x int, y int) {
-
 	board[x][y+2] = true
 	board[x+1][y] = true
 	board[x+1][y+2] = true
