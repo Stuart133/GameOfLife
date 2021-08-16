@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const board_size = 10
+const board_size = 20
 const grid_size = board_size + 2 // Add a buffer layer so edge cells have correct neighbour calculations
 const tick_delay = time.Millisecond * 100
 
@@ -15,7 +15,7 @@ type Board [][]bool
 
 func main() {
 	board := make_board(grid_size)
-	board.add_glider(0, 0)
+	board.add_lwss(2, 10)
 	board.draw()
 	time.Sleep(tick_delay)
 
@@ -111,4 +111,21 @@ func (board Board) add_glider(x int, y int) {
 	board[x+1][y+2] = true
 	board[x+2][y+1] = true
 	board[x+2][y+2] = true
+}
+
+// Create a LWSS at given coordinates
+func (board Board) add_lwss(x int, y int) {
+
+	board[x][y+1] = true
+	board[x][y+4] = true
+
+	board[x+1][y] = true
+
+	board[x+2][y] = true
+	board[x+2][y+4] = true
+
+	board[x+3][y] = true
+	board[x+3][y+1] = true
+	board[x+3][y+2] = true
+	board[x+3][y+3] = true
 }
