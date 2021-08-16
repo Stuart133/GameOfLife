@@ -8,12 +8,13 @@ import (
 )
 
 const board_size = 10
+const grid_size = board_size + 2 // Add a buffer layer so edge cells have correct neighbour calculations
 const tick_delay = time.Millisecond * 100
 
 type Board [][]bool
 
 func main() {
-	board := make_board(board_size)
+	board := make_board(grid_size)
 	board.add_glider(0, 0)
 	board.draw()
 	time.Sleep(tick_delay)
@@ -33,7 +34,7 @@ func clear() {
 
 // Compute new board state
 func (b Board) compute_new_state() Board {
-	nb := make_board(board_size)
+	nb := make_board(grid_size)
 
 	for i := range b {
 		for j := range b[i] {
@@ -59,12 +60,12 @@ func (board Board) num_neighbours(x int, y int) int {
 			}
 
 			// Check y overflow
-			if y+y_offset < 0 || y+y_offset >= board_size {
+			if y+y_offset < 0 || y+y_offset >= grid_size {
 				continue
 			}
 
 			// Check x overflow
-			if x+x_offset < 0 || x+x_offset >= board_size {
+			if x+x_offset < 0 || x+x_offset >= grid_size {
 				continue
 			}
 
@@ -80,8 +81,8 @@ func (board Board) num_neighbours(x int, y int) int {
 // Draw board on console
 func (board Board) draw() {
 	clear()
-	for i := range board {
-		for j := range board[i] {
+	for i := 0; i < board_size; i++ {
+		for j := 0; j < board_size; j++ {
 			if board[i][j] {
 				fmt.Print("x")
 			} else {
@@ -94,9 +95,9 @@ func (board Board) draw() {
 
 // Initialize empty board
 func make_board(size int) Board {
-	board := make(Board, 10)
+	board := make(Board, size)
 	for i := range board {
-		board[i] = make([]bool, 10)
+		board[i] = make([]bool, size)
 	}
 
 	return board
